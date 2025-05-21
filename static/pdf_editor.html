@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>PDFPILOT</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 <body>
@@ -14,69 +14,34 @@
     <!-- Contenedor lateral de herramientas -->
     <div class="opccontenedor">
         <div class="opcionarchivo">
-            <img src="guardar-icono.png" alt="Guardar" />
+            <img src="guardar-icono.png" alt="" />
             Guardar archivo
         </div>
         <div class="opcionarchivo">
-            <img src="texto-icono.png" alt="Texto" />
+            <img src="texto-icono.png" alt="" />
             Agregar texto
         </div>
         <div class="opcionarchivo">
-            <img src="resaltar-icono.png" alt="Resaltar" />
+            <img src="resaltar-icono.png" alt="" />
             Resaltar
         </div>
         <div class="opcionarchivo">
-            <img src="lapiz-icono.png" alt="Dibujar" />
+            <img src="lapiz-icono.png" alt="" />
             Dibujar
         </div>
         <div class="opcionarchivo">
-            <img src="borrar-icono.png" alt="Borrar" />
+            <img src="borrar-icono.png" alt="" />
             Eliminar elemento
         </div>
         <div class="opcionarchivo">
-            <img src="archivo-icono.png" alt="Subir PDF" />
+            <img src="archivo-icono.png" alt="" />
             Cargar nuevo PDF
         </div>
     </div>
 
     <!-- Lienzo donde se mostrará el PDF -->
     <canvas id="pdfCanvas" style="margin-left: 220px; border: 1px solid black;"></canvas>
-
-    <script>
-    const canvas = document.getElementById("pdfCanvas");
-    const ctx = canvas.getContext("2d");
-    const pdfURL = sessionStorage.getItem("pdfToEdit");
-
-    if (!pdfURL) {
-        alert("No se encontró ningún archivo PDF. Regresa al menú para cargar uno.");
-        window.location.href = "index.html";
-    } else {
-        pdfjsLib.getDocument(pdfURL).promise.then(pdf => {
-            console.log("PDF cargado. Total de páginas: " + pdf.numPages);
-            // Carga la primera página
-            return pdf.getPage(1);
-        }).then(page => {
-            const scale = 1.5;
-            const viewport = page.getViewport({ scale });
-
-            // Ajusta el tamaño del canvas
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-
-            return page.render(renderContext).promise;
-        }).catch(error => {
-            console.error("Error al renderizar el PDF:", error);
-            alert("Ocurrió un error al mostrar el PDF.");
-        });
-    }
-</script>
-
     
-
+    <script src="scripts/script.js"></script>
 </body>
 </html>
