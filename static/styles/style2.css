@@ -1,0 +1,51 @@
+body {
+    background-color: #faa906;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo para el contenedor principal del título */
+.titulo1 {
+    background-color: rgb(1, 27, 224);
+    color: aliceblue;
+    text-align: center;
+    padding: 80px 20px;
+    font-size: 64px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para el enlace dentro del título */
+.titulo1 a {
+    color: aliceblue;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.titulo1 a:hover {
+    color: #dcdcdc;
+}
+
+/* Estilo para el subtítulo y el input */
+.titulo2 {
+    text-align: center;
+    color: #000000;
+    font-size: 32px;
+    margin-top: 40px;
+}
+
+.titulo2 input[type="file"] {
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    background-color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.titulo2 input[type="file"]:hover {
+    background-color: #f1f1f1;
+}
