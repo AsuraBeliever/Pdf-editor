@@ -2,33 +2,26 @@
 <html lang="en-EN">
 <head>
     <meta charset="UTF-8">
-    <title>PDFPILOT - Cargar Archivo</title>
+    <title>PDFPILOT - Menú Principal</title>
     <link rel="stylesheet" href="styles/style2.css">
 </head>
 <body>
 
     <div class="titulo1">
         <h1>
-            <a href="#" title="Volver al menú principal">PDFPILOT</a>
+            <a href="#" title="Estás en el menú principal">PDFPILOT</a>
         </h1>
     </div>
 
     <div class="titulo2">
-        <h2>Introduzca el archivo que quiera editar:</h2>
-        <input type="file" id="fileInput" title="Seleccione un archivo para editar" accept="application/pdf">
+        <h2>Bienvenido al sistema PDFPILOT</h2>
+        <button onclick="irAPDFPilot()" title="Ir al visor de PDF">Ir al visor PDF</button>
     </div>
 
     <script>
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file && file.type === "application/pdf") {
-                const fileURL = URL.createObjectURL(file);
-                sessionStorage.setItem("pdfToEdit", fileURL);
-                window.location.href = "pdf_editor.html"; // esta es la página que mostrará el PDF
-            } else {
-                alert("Por favor selecciona un archivo PDF válido.");
-            }
-        });
+        function irAPDFPilot() {
+            window.location.href = "pdf_editor.html";
+        }
     </script>
 
 </body>
