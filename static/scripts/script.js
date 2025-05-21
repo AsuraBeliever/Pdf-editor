@@ -1,32 +1,41 @@
-const canvas = document.getElementById("pdfCanvas");
-    const ctx = canvas.getContext("2d");
-    const pdfURL = sessionStorage.getItem("pdfToEdit");
-    
-    console.log("pdfURL:", pdfURL)
-    if (!pdfURL) {
-        alert("No se encontró ningún archivo PDF. Regresa al menú para cargar uno.");
-        window.location.href = "index.html";
-    } else {
-        pdfjsLib.getDocument(pdfURL).promise.then(pdf => {
-            console.log("PDF cargado. Total de páginas: " + pdf.numPages);
-            // Carga la primera página
-            return pdf.getPage(1);
-        }).then(page => {
-            const scale = 1.5;
-            const viewport = page.getViewport({ scale });
+const input = document.getElementById("fileInput");
+        const container = document.getElementById("pdfContainer");
 
-            // Ajusta el tamaño del canvas
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
+        input.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === "application/pdf") {
+                const fileURL = URL.createObjectURL(file);
 
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
+                container.innerHTML = ""; // limpia el contenedor antes de mostrar uno nuevo
 
-            return page.render(renderContext).promise;
-        }).catch(error => {
-            console.error("Error al renderizar el PDF:", error);
-            alert("Ocurrió un error al mostrar el PDF.");
+                pdfjsLib.getDocument(fileURL).promise.then(pdf => {
+                    console.log("Total de páginas: " + pdf.numPages);
+
+                    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                        pdf.getPage(pageNumber).then(page => {
+                            const scale = 1.5;
+                            const viewport = page.getViewport({ scale });
+
+                            const canvas = document.createElement("canvas");
+                            canvas.className = "pdf-page";
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+
+                            const context = canvas.getContext("2d");
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+
+                            page.render(renderContext);
+                            container.appendChild(canvas);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Error al mostrar el PDF:", error);
+                    alert("Error al mostrar el PDF.");
+                });
+            } else {
+                alert("Por favor selecciona un archivo PDF válido.");
+            }
         });
-    }
