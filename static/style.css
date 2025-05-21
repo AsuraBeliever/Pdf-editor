@@ -1,0 +1,58 @@
+body {
+    background-color: #faa906;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Encabezado del título PDFPilot */
+.titulo1 {
+    color: white;
+    position: absolute;
+    background-color: rgb(1, 27, 224);
+    height: 70px;
+    width: 180px;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Contenedor lateral para los botones */
+.opccontenedor {
+    position: absolute;
+    top: 70px; /* Debajo del título */
+    left: 0;
+    background-color: #fa8d2e; /* Similar al fondo lateral de la imagen */
+    width: 180px;
+    height: 100vh;
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+
+/* Botones de acción (Guardar, Agregar texto) */
+.opcionarchivo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.opcionarchivo:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Iconos dentro de los botones (si los usas con ::before o <img>) */
+.opcionarchivo i,
+.opcionarchivo img {
+    width: 20px;
+    height: 20px;
+}

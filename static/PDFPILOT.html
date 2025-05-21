@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-EN">
+<head>
+    <meta charset="UTF-8">
+    <title>PDFPILOT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        .pdf-page {
+            margin-left: 220px;
+            margin-bottom: 20px;
+            border: 2px solid #b42424;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .titulo2 {
+            margin-left: 220px;
+            margin-top: 90px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Título -->
+    <div class="titulo1">
+        <h1>PDFPILOT</h1>
+    </div>
+
+    <!-- Menú lateral decorativo -->
+    <div class="opccontenedor">
+        <div class="opcionarchivo"><img src="guardar-icono.png" alt="Guardar" />Guardar archivo</div>
+        <div class="opcionarchivo"><img src="texto-icono.png" alt="Texto" />Agregar texto</div>
+        <div class="opcionarchivo"><img src="resaltar-icono.png" alt="Resaltar" />Resaltar</div>
+        <div class="opcionarchivo"><img src="lapiz-icono.png" alt="Dibujar" />Dibujar</div>
+        <div class="opcionarchivo"><img src="borrar-icono.png" alt="Borrar" />Eliminar elemento</div>
+        <div class="opcionarchivo"><img src="archivo-icono.png" alt="Subir PDF" />Cargar nuevo PDF</div>
+    </div>
+
+    <!-- Botón para subir PDF -->
+    <div class="titulo2">
+        <h2>Seleccione un archivo PDF para visualizar:</h2>
+        <input type="file" id="fileInput" accept="application/pdf">
+    </div>
+
+    <!-- Donde se muestran todas las páginas -->
+    <div id="pdfContainer"></div>
+
+    <script>
+        const input = document.getElementById("fileInput");
+        const container = document.getElementById("pdfContainer");
+
+        input.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === "application/pdf") {
+                const fileURL = URL.createObjectURL(file);
+
+                container.innerHTML = ""; // limpia el contenedor antes de mostrar uno nuevo
+
+                pdfjsLib.getDocument(fileURL).promise.then(pdf => {
+                    console.log("Total de páginas: " + pdf.numPages);
+
+                    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                        pdf.getPage(pageNumber).then(page => {
+                            const scale = 1.5;
+                            const viewport = page.getViewport({ scale });
+
+                            const canvas = document.createElement("canvas");
+                            canvas.className = "pdf-page";
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+
+                            const context = canvas.getContext("2d");
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+
+                            page.render(renderContext);
+                            container.appendChild(canvas);
+                        });
+                    }
+                }).catch(error => {
+                    console.error("Error al mostrar el PDF:", error);
+                    alert("Error al mostrar el PDF.");
+                });
+            } else {
+                alert("Por favor selecciona un archivo PDF válido.");
+            }
+        });
+    </script>
+
+</body>
+</html>
