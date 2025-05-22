@@ -6,17 +6,25 @@ async function guardarPDF() {
     for (let i = 0; i < paginas.length; i++) {
         const pagina = paginas[i];
 
-        // Crear un contenedor temporal que incluya la página y sus textos agregados
+        // Crear contenedor temporal para capturar la página real con sus textos
         const contenedorTemp = document.createElement("div");
         contenedorTemp.style.position = "relative";
-        contenedorTemp.style.width = pagina.offsetWidth + "px";
-        contenedorTemp.style.height = pagina.offsetHeight + "px";
+        contenedorTemp.style.width = pagina.width + "px";
+        contenedorTemp.style.height = pagina.height + "px";
 
-        // Clonar el canvas de la página
-        const canvasClonado = pagina.cloneNode(true);
-        contenedorTemp.appendChild(canvasClonado);
+        // Usar el canvas ORIGINAL, no clonado
+        const canvasOriginal = pagina;
+        const canvasRect = canvasOriginal.getBoundingClientRect();
 
-        // Agregar los elementos de texto posicionados sobre esta página
+        // Clonar y posicionar el canvas original
+        const canvasClone = document.createElement("canvas");
+        canvasClone.width = canvasOriginal.width;
+        canvasClone.height = canvasOriginal.height;
+        const ctx = canvasClone.getContext("2d");
+        ctx.drawImage(canvasOriginal, 0, 0);
+        contenedorTemp.appendChild(canvasClone);
+
+        // Añadir todos los textos que están sobre esta página
         const textos = Array.from(document.querySelectorAll(".text-box")).filter(box => {
             const parent = box.closest(".pdf-page");
             return parent === pagina;
@@ -25,18 +33,23 @@ async function guardarPDF() {
         textos.forEach(texto => {
             const clon = texto.cloneNode(true);
             clon.contentEditable = false;
+            clon.style.position = "absolute";
+            // Reposicionar respecto al canvas
+            const textRect = texto.getBoundingClientRect();
+            clon.style.left = (textRect.left - canvasRect.left) + "px";
+            clon.style.top = (textRect.top - canvasRect.top) + "px";
             contenedorTemp.appendChild(clon);
         });
 
         document.body.appendChild(contenedorTemp);
 
-        // Capturar imagen del contenido combinado
-        const canvas = await html2canvas(contenedorTemp, {
+        // Capturar imagen del contenedor con html2canvas
+        const imagenCanvas = await html2canvas(contenedorTemp, {
             scale: 2,
             backgroundColor: "#fff"
         });
 
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = imagenCanvas.toDataURL("image/png");
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -49,4 +62,5 @@ async function guardarPDF() {
 
     pdf.save("pdf_editado.pdf");
 }
+
 
