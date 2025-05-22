@@ -58,10 +58,26 @@ let addingText = false;
 
         document.addEventListener("mousemove", function(e) {
             if (isDragging) {
-                el.style.left = (e.clientX - offsetX) + "px";
-                el.style.top = (e.clientY - offsetY) + "px";
+                const parent = el.parentElement.querySelector(".pdf-page");
+                const bounds = parent.getBoundingClientRect();
+
+                let newLeft = e.clientX - offsetX;
+                let newTop = e.clientY - offsetY;
+
+                // Limitar dentro del canvas
+                const maxLeft = bounds.right - el.offsetWidth;
+                const maxTop = bounds.bottom - el.offsetHeight;
+
+                if (newLeft < bounds.left) newLeft = bounds.left;
+                if (newTop < bounds.top) newTop = bounds.top;
+                if (newLeft > maxLeft) newLeft = maxLeft;
+                if (newTop > maxTop) newTop = maxTop;
+
+                el.style.left = newLeft + "px";
+                el.style.top = newTop + "px";
             }
         });
+
 
         document.addEventListener("mouseup", function() {
             isDragging = false;
