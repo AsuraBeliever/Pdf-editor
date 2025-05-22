@@ -60,3 +60,20 @@ body {
 .cursor-texto {
     cursor: text !important;
 }
+
+.resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #000;
+  z-index: 10;
+}
+
+.resize-handle.nw { top: -4px; left: -4px; cursor: nwse-resize; }
+.resize-handle.n  { top: -4px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.resize-handle.ne { top: -4px; right: -4px; cursor: nesw-resize; }
+.resize-handle.e  { top: 50%; right: -4px; transform: translateY(-50%); cursor: ew-resize; }
+.resize-handle.se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+.resize-handle.s  { bottom: -4px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.resize-handle.sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+.resize-handle.w  { top: 50%; left: -4px; transform: translateY(-50%); cursor: ew-resize; }

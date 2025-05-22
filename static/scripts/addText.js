@@ -26,8 +26,6 @@ let addingText = false;
         textBox.style.border = "1px dashed #000";
         textBox.style.backgroundColor = "rgba(255,255,255,0.8)";
         textBox.style.padding = "4px";
-        textBox.style.resize = "both";
-        textBox.style.overflow = "auto";
         textBox.style.zIndex = 1000;
         textBox.style.cursor = "move";
 
@@ -37,6 +35,20 @@ let addingText = false;
         editableArea.style.minHeight = "20px";
 
         textBox.appendChild(editableArea);
+
+        const directions = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
+        directions.forEach(dir => {
+            const handle = document.createElement("div");
+            handle.className = "resize-handle " + dir;
+            textBox.appendChild(handle);
+
+            handle.addEventListener("mousedown", e => {
+                e.stopPropagation();
+                e.preventDefault();
+                startResizing(e, textBox, dir);
+            });
+        });
+
 
         // Botón de cerrar fuera del área editable
         const closeBtn = document.createElement("span");
@@ -105,3 +117,52 @@ let addingText = false;
             el.style.userSelect = "auto";
         });
     }
+
+    function startResizing(e, el, direction) {
+        e.preventDefault();
+
+        const startX = e.clientX;
+        const startY = e.clientY;
+        const startWidth = el.offsetWidth;
+        const startHeight = el.offsetHeight;
+        const startLeft = el.offsetLeft;
+        const startTop = el.offsetTop;
+
+        function doResize(e) {
+            let newWidth = startWidth;
+            let newHeight = startHeight;
+            let newLeft = startLeft;
+            let newTop = startTop;
+
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            if (direction.includes("e")) newWidth = startWidth + dx;
+            if (direction.includes("s")) newHeight = startHeight + dy;
+            if (direction.includes("w")) {
+                newWidth = startWidth - dx;
+                newLeft = startLeft + dx;
+            }
+            if (direction.includes("n")) {
+                newHeight = startHeight - dy;
+                newTop = startTop + dy;
+            }
+
+            if (newWidth > 60) {
+                el.style.width = newWidth + "px";
+                el.style.left = newLeft + "px";
+            }
+            if (newHeight > 20) {
+                el.style.height = newHeight + "px";
+                el.style.top = newTop + "px";
+            }
+        }
+
+        function stopResize() {
+            document.removeEventListener("mousemove", doResize);
+            document.removeEventListener("mouseup", stopResize);
+        }
+
+        document.addEventListener("mousemove", doResize);
+        document.addEventListener("mouseup", stopResize);
+}
