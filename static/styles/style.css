@@ -8,7 +8,7 @@ body {
 /* Encabezado del título PDFPilot */
 .titulo1 {
     color: white;
-    position: absolute;
+    position: fixed;
     background-color: rgb(1, 27, 224);
     height: 70px;
     width: 180px;
@@ -24,7 +24,7 @@ body {
 
 /* Contenedor lateral para los botones */
 .opccontenedor {
-    position: absolute;
+    position: fixed;
     top: 70px; /* Debajo del título */
     left: 0;
     background-color: #fa8d2e; /* Similar al fondo lateral de la imagen */
