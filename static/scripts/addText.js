@@ -110,24 +110,30 @@ function makeDraggable(el) {
 
     el.addEventListener("mousedown", function(e) {
         isDragging = true;
-        offsetX = e.clientX - el.getBoundingClientRect().left;
-        offsetY = e.clientY - el.getBoundingClientRect().top;
+
+        const rect = el.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
         el.style.userSelect = "none";
+
+        e.preventDefault(); // ✅ Previene comportamiento inesperado
     });
 
     document.addEventListener("mousemove", function(e) {
         if (isDragging) {
-            const parent = el.parentElement.querySelector(".pdf-page");
+            const parent = el.parentElement;
             const bounds = parent.getBoundingClientRect();
 
-            let newLeft = e.clientX - offsetX;
-            let newTop = e.clientY - offsetY;
+            let newLeft = e.clientX - bounds.left - offsetX;
+            let newTop = e.clientY - bounds.top - offsetY;
 
-            const maxLeft = bounds.right - el.offsetWidth;
-            const maxTop = bounds.bottom - el.offsetHeight;
+            // Restringir el movimiento dentro del contenedor
+            const maxLeft = parent.offsetWidth - el.offsetWidth;
+            const maxTop = parent.offsetHeight - el.offsetHeight;
 
-            if (newLeft < bounds.left) newLeft = bounds.left;
-            if (newTop < bounds.top) newTop = bounds.top;
+            if (newLeft < 0) newLeft = 0;
+            if (newTop < 0) newTop = 0;
             if (newLeft > maxLeft) newLeft = maxLeft;
             if (newTop > maxTop) newTop = maxTop;
 
@@ -141,6 +147,7 @@ function makeDraggable(el) {
         el.style.userSelect = "auto";
     });
 }
+
 
 function startResizing(e, el, direction) {
     e.preventDefault();
