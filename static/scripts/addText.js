@@ -19,8 +19,8 @@ let addingText = false;
 
         const textBox = document.createElement("div");
         textBox.style.position = "absolute";
-        textBox.style.left = x + "px";
-        textBox.style.top = y + "px";
+        textBox.style.left = (rect.left + x) + "px";
+        textBox.style.top = (rect.top + y) + "px";
         textBox.style.minWidth = "120px";
         textBox.style.minHeight = "30px";
         textBox.style.width = "120px";
@@ -48,6 +48,7 @@ let addingText = false;
         editableArea.style.margin = "0";
         editableArea.style.whiteSpace = "pre-wrap"; // Permite saltos de línea
         editableArea.style.wordBreak = "break-word"; // Rompe palabras largas
+        editableArea.style.fontSize = "16px";
 
         
         editableArea.addEventListener("input", () => {
