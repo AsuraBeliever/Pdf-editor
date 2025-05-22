@@ -1,4 +1,4 @@
-async function guardarPDF() {
+async function savepdf() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     const paginas = document.querySelectorAll(".pdf-page");
@@ -62,5 +62,8 @@ async function guardarPDF() {
 
     pdf.save("pdf_editado.pdf");
 }
+
+
+
 
 
