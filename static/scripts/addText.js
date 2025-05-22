@@ -2,16 +2,25 @@ let addingText = false;
 
     document.getElementById("addTextBtn").addEventListener("click", () => {
         addingText = true;
+        container.classList.add("cursor-texto");
     });
 
     container.addEventListener("click", (e) => {
         if (!addingText) return;
         pdfContainer.classList.toggle("cursor-texto", addingText)
 
-        const x = e.clientX;
-        const y = e.clientY;
+        const target = e.target;
+        if (!target.classList.contains("pdf-page")) return; // Solo permitir sobre el canvas PDF
+
+        const rect = target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
 
         const textBox = document.createElement("div");
+        textBox.addEventListener("dblclick", () => {
+            textBox.remove()
+        });
         textBox.contentEditable = true;
         textBox.textContent = "Ingresar texto aqui";
         textBox.style.position = "absolute";
@@ -28,9 +37,12 @@ let addingText = false;
         textBox.style.cursor = "move";
 
         makeDraggable(textBox);
-        document.body.appendChild(textBox);
+        target.parentElement.appendChild(textBox);
+        textBox.style.left = rect.left + x + "px";
+        textBox.style.top = rect.top + y + "px";
 
         addingText = false;
+        container.classList.remove("cursor-texto");
     });
 
     function makeDraggable(el) {
