@@ -28,6 +28,8 @@ let addingText = false;
         textBox.style.padding = "4px";
         textBox.style.zIndex = 1000;
         textBox.style.cursor = "move";
+        textBox.classList.add("text-box");
+
 
         const editableArea = document.createElement("div");
         editableArea.contentEditable = true;
@@ -68,6 +70,18 @@ let addingText = false;
         });
 
         textBox.appendChild(closeBtn);
+
+        textBox.addEventListener("click", (e) => {
+            e.stopPropagation(); // Para que no se deseleccione inmediatamente
+            document.querySelectorAll(".text-box").forEach(tb => tb.classList.remove("selected"));
+            textBox.classList.add("selected");
+        });
+
+        document.addEventListener("click", () => {
+            document.querySelectorAll(".text-box").forEach(tb => tb.classList.remove("selected"));
+        });
+
+
 
         makeDraggable(textBox);
         target.parentElement.appendChild(textBox);
