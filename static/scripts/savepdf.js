@@ -8,7 +8,6 @@ async function savepdf() {
         const pagina = paginas[i];
         const paginaRect = pagina.getBoundingClientRect();
 
-        // Clonar las cajas de texto relevantes y agregarlas temporalmente a la página
         const clones = [];
         textos.forEach(texto => {
             const textoRect = texto.getBoundingClientRect();
@@ -19,8 +18,6 @@ async function savepdf() {
                 textoRect.bottom <= paginaRect.bottom) {
 
                 const clon = texto.cloneNode(true);
-
-                // Eliminar elementos de UI
                 clon.querySelectorAll(".resize-handle, span").forEach(el => el.remove());
 
                 clon.contentEditable = false;
@@ -38,15 +35,13 @@ async function savepdf() {
             }
         });
 
-        // Capturar la página renderizada por PDF.js + textos añadidos
         const imagenCanvas = await html2canvas(pagina, {
             scale: 2,
-            backgroundColor: "#ffffff", // blanco para PDF
+            backgroundColor: "#ffffff",
             useCORS: true,
             allowTaint: true
         });
 
-        // Eliminar los clones de texto después de capturar
         clones.forEach(clon => clon.remove());
 
         const imgData = imagenCanvas.toDataURL("image/png");
@@ -58,5 +53,10 @@ async function savepdf() {
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     }
 
-    pdf.save("pdf_editado.pdf");
+    // Pedir nombre al usuario
+    let filename = prompt("¿Qué nombre deseas para el archivo PDF?", "mi_archivo");
+    if (!filename) filename = "archivo_sin_nombre";
+    if (!filename.toLowerCase().endsWith(".pdf")) filename += ".pdf";
+
+    pdf.save(filename);
 }

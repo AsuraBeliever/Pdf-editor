@@ -117,7 +117,6 @@ function makeDraggable(el) {
 
         el.style.userSelect = "none";
 
-        e.preventDefault(); // ✅ Previene comportamiento inesperado
     });
 
     document.addEventListener("mousemove", function(e) {
@@ -147,6 +146,7 @@ function makeDraggable(el) {
         el.style.userSelect = "auto";
     });
 }
+
 
 
 function startResizing(e, el, direction) {
