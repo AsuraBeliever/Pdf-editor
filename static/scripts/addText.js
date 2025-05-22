@@ -135,7 +135,6 @@ let addingText = false;
 
     function startResizing(e, el, direction) {
         e.preventDefault();
-
         const startX = e.clientX;
         const startY = e.clientY;
         const startWidth = el.offsetWidth;
@@ -143,24 +142,47 @@ let addingText = false;
         const startLeft = el.offsetLeft;
         const startTop = el.offsetTop;
 
+        const parent = el.parentElement.querySelector(".pdf-page") || el.closest(".pdf-page");
+        const bounds = parent.getBoundingClientRect();
+
         function doResize(e) {
+            let dx = e.clientX - startX;
+            let dy = e.clientY - startY;
+
             let newWidth = startWidth;
             let newHeight = startHeight;
             let newLeft = startLeft;
             let newTop = startTop;
 
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-
-            if (direction.includes("e")) newWidth = startWidth + dx;
-            if (direction.includes("s")) newHeight = startHeight + dy;
+            if (direction.includes("e")) {
+                newWidth = startWidth + dx;
+                const maxRight = bounds.left + bounds.width;
+                if (el.offsetLeft + newWidth > maxRight) {
+                    newWidth = maxRight - el.offsetLeft;
+                }
+            }
+            if (direction.includes("s")) {
+                newHeight = startHeight + dy;
+                const maxBottom = bounds.top + bounds.height;
+                if (el.offsetTop + newHeight > maxBottom) {
+                    newHeight = maxBottom - el.offsetTop;
+                }
+            }
             if (direction.includes("w")) {
                 newWidth = startWidth - dx;
                 newLeft = startLeft + dx;
+                if (newLeft < bounds.left) {
+                    newLeft = bounds.left;
+                    newWidth = startWidth + (startLeft - bounds.left);
+                }
             }
             if (direction.includes("n")) {
                 newHeight = startHeight - dy;
                 newTop = startTop + dy;
+                if (newTop < bounds.top) {
+                    newTop = bounds.top;
+                    newHeight = startHeight + (startTop - bounds.top);
+                }
             }
 
             if (newWidth > 60) {
@@ -181,3 +203,4 @@ let addingText = false;
         document.addEventListener("mousemove", doResize);
         document.addEventListener("mouseup", stopResize);
 }
+
