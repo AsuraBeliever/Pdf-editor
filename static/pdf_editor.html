@@ -5,6 +5,9 @@
     <title>PDFPILOT</title>
     <link rel="stylesheet" href="styles/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> 
+
     <style>
         .pdf-page {
             margin-left: 220px;
@@ -27,7 +30,7 @@
 
     <!-- Menú lateral decorativo -->
     <div class="opccontenedor">
-        <div class="opcionarchivo">Guardar archivo</div>
+        <div class="opcionarchivo" onclick="guardarPDF()">Guardar archivo</div> <!--edit-->
         <div class="opcionarchivo" id="addTextBtn">Agregar texto</div>
         <div class="opcionarchivo">Resaltar</div>
         <div class="opcionarchivo">Dibujar</div>
@@ -45,6 +48,8 @@
     <div id="pdfContainer"></div>
 
     <script src="scripts/loadpdf.js"></script>
-    <script src="scripts/addText.js"></script>
+    <script src="scripts/addText.js"></script>   
+    <script src="scripts/savepdf.js"></script> 
+
 </body>
 </html>

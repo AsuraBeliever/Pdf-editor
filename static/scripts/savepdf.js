@@ -1,21 +1,52 @@
-function descargarPDF() {
-  // 1. Crear un Blob con contenido de ejemplo (reemplázalo con tu PDF real)
-  const contenido = '%PDF-1.4 ...'; // Aquí irían los bytes de un PDF real
-  const blob = new Blob([contenido], { type: 'application/pdf' });
+async function guardarPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    const paginas = document.querySelectorAll(".pdf-page");
 
-  // 2. Generar URL temporal
-  const url = URL.createObjectURL(blob);
+    for (let i = 0; i < paginas.length; i++) {
+        const pagina = paginas[i];
 
-  // 3. Crear enlace y simular clic
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'documento_editado.pdf'; // Nombre del archivo
-  document.body.appendChild(a);
-  a.click();
+        // Crear un contenedor temporal que incluya la página y sus textos agregados
+        const contenedorTemp = document.createElement("div");
+        contenedorTemp.style.position = "relative";
+        contenedorTemp.style.width = pagina.offsetWidth + "px";
+        contenedorTemp.style.height = pagina.offsetHeight + "px";
 
-  // 4. Limpiar
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 100);
+        // Clonar el canvas de la página
+        const canvasClonado = pagina.cloneNode(true);
+        contenedorTemp.appendChild(canvasClonado);
+
+        // Agregar los elementos de texto posicionados sobre esta página
+        const textos = Array.from(document.querySelectorAll(".text-box")).filter(box => {
+            const parent = box.closest(".pdf-page");
+            return parent === pagina;
+        });
+
+        textos.forEach(texto => {
+            const clon = texto.cloneNode(true);
+            clon.contentEditable = false;
+            contenedorTemp.appendChild(clon);
+        });
+
+        document.body.appendChild(contenedorTemp);
+
+        // Capturar imagen del contenido combinado
+        const canvas = await html2canvas(contenedorTemp, {
+            scale: 2,
+            backgroundColor: "#fff"
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+        document.body.removeChild(contenedorTemp);
+    }
+
+    pdf.save("pdf_editado.pdf");
 }
+
