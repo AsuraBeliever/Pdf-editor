@@ -23,6 +23,9 @@ let addingText = false;
         textBox.style.top = y + "px";
         textBox.style.minWidth = "120px";
         textBox.style.minHeight = "30px";
+        textBox.style.width = "120px";
+        textBox.style.height = "30px";
+
         textBox.style.border = "none";
         textBox.style.backgroundColor = "rgba(255,255,255,0.8)";
         textBox.style.padding = "4px";
@@ -34,8 +37,24 @@ let addingText = false;
         const editableArea = document.createElement("div");
         editableArea.contentEditable = true;
         editableArea.textContent = "Ingresar texto";
-        editableArea.style.minHeight = "20px";
         editableArea.style.paddingRight = "20px";
+
+        editableArea.style.width = "100%";
+        editableArea.style.boxSizing = "border-box";
+        editableArea.style.overflow = "hidden";
+        editableArea.style.outline = "none";
+        editableArea.style.resize = "none";
+        editableArea.style.padding = "0";
+        editableArea.style.margin = "0";
+        editableArea.style.whiteSpace = "pre-wrap"; // Permite saltos de línea
+        editableArea.style.wordBreak = "break-word"; // Rompe palabras largas
+
+        
+        editableArea.addEventListener("input", () => {
+            autoResize(textBox, editableArea);
+        });
+
+
 
         textBox.appendChild(editableArea);
 
@@ -203,4 +222,15 @@ let addingText = false;
         document.addEventListener("mousemove", doResize);
         document.addEventListener("mouseup", stopResize);
 }
+
+    function autoResize(box, content) {
+    content.style.height = "auto"; // reset
+    const newHeight = content.scrollHeight;
+
+    // Ajusta tanto la caja como el área editable
+    content.style.height = newHeight + "px";
+    box.style.height = newHeight + "px";
+}
+
+
 
