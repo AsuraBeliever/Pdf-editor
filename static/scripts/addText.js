@@ -18,15 +18,10 @@ let addingText = false;
 
 
         const textBox = document.createElement("div");
-        textBox.addEventListener("dblclick", () => {
-            textBox.remove()
-        });
-        textBox.contentEditable = true;
-        textBox.textContent = "Ingresar texto aqui";
         textBox.style.position = "absolute";
         textBox.style.left = x + "px";
         textBox.style.top = y + "px";
-        textBox.style.minWidth = "100px";
+        textBox.style.minWidth = "120px";
         textBox.style.minHeight = "30px";
         textBox.style.border = "1px dashed #000";
         textBox.style.backgroundColor = "rgba(255,255,255,0.8)";
@@ -35,6 +30,32 @@ let addingText = false;
         textBox.style.overflow = "auto";
         textBox.style.zIndex = 1000;
         textBox.style.cursor = "move";
+
+        const editableArea = document.createElement("div");
+        editableArea.contentEditable = true;
+        editableArea.textContent = "Ingresar texto";
+        editableArea.style.minHeight = "20px";
+
+        textBox.appendChild(editableArea);
+
+        // Botón de cerrar fuera del área editable
+        const closeBtn = document.createElement("span");
+        closeBtn.innerHTML = "✖";
+        closeBtn.style.position = "absolute";
+        closeBtn.style.top = "2px";
+        closeBtn.style.right = "4px";
+        closeBtn.style.cursor = "pointer";
+        closeBtn.style.color = "red";
+        closeBtn.style.fontSize = "14px";
+        closeBtn.style.userSelect = "none";
+        closeBtn.setAttribute("contenteditable", "false")
+        closeBtn.style.userSelect = "none";
+
+        closeBtn.addEventListener("click", () => {
+            textBox.remove();
+        });
+
+        textBox.appendChild(closeBtn);
 
         makeDraggable(textBox);
         target.parentElement.appendChild(textBox);
