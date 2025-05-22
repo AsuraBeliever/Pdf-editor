@@ -23,7 +23,7 @@ let addingText = false;
         textBox.style.top = y + "px";
         textBox.style.minWidth = "120px";
         textBox.style.minHeight = "30px";
-        textBox.style.border = "1px dashed #000";
+        textBox.style.border = "none";
         textBox.style.backgroundColor = "rgba(255,255,255,0.8)";
         textBox.style.padding = "4px";
         textBox.style.zIndex = 1000;
@@ -35,6 +35,7 @@ let addingText = false;
         editableArea.contentEditable = true;
         editableArea.textContent = "Ingresar texto";
         editableArea.style.minHeight = "20px";
+        editableArea.style.paddingRight = "20px";
 
         textBox.appendChild(editableArea);
 
